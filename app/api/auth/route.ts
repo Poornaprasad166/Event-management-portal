@@ -4,19 +4,31 @@ import { encodeSession, SESSION_COOKIE } from '@/lib/auth';
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { email, name, organization, role } = body;
+    const { email, name, organization, role, password } = body;
 
     if (!email || !name || (role !== 'admin' && role !== 'user')) {
       return NextResponse.json(
-        { error: 'Valid name, email, and role (admin or user) are required.' },
+        { error: 'Valid name, email, and role are required.' },
         { status: 400 }
       );
+    }
+
+    if (role === 'admin') {
+      const validAdminEmail = process.env.ADMIN_EMAIL || 'admin@aurelialive.in';
+      const validAdminPass = process.env.ADMIN_PASSWORD || 'Aurelia@2026';
+
+      if (email.trim().toLowerCase() !== validAdminEmail.toLowerCase() || password !== validAdminPass) {
+        return NextResponse.json(
+          { error: 'Invalid organizer administrator credentials.' },
+          { status: 401 }
+        );
+      }
     }
 
     const token = encodeSession({
       email: email.trim(),
       name: name.trim(),
-      organization: (organization || 'Independent Client').trim(),
+      organization: (organization || 'Independent Delegate').trim(),
       role,
     });
 
@@ -36,10 +48,4 @@ export async function POST(request: NextRequest) {
   } catch {
     return NextResponse.json({ error: 'Invalid authentication payload.' }, { status: 400 });
   }
-}
-
-export async function DELETE() {
-  const response = NextResponse.json({ message: 'Signed out' }, { status: 200 });
-  response.cookies.delete(SESSION_COOKIE);
-  return response;
 }

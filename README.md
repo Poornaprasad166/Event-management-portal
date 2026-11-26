@@ -9,6 +9,4 @@ Transformed into **Aurelia Live Productions**, a commercial event organizer and 
 
 ## Setup & Deployment
 1. Run `npm install`.
-2. Copy `.env.example` to `.env.local` and configure `POSTGRESQL_URI`.
-3. Execute `schema.sql` in your PostgreSQL database to initialize tables and commercial event seed data.
-4. Run `npm run dev` locally, 
+2. Run `npm run dev` locally, 

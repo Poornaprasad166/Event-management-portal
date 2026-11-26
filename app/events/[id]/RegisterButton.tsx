@@ -93,7 +93,7 @@ export default function RegisterButton({
 
       <button
         type="submit"
-        disabled={status === 'loading' || status === 'success' || (soldOut && status !== 'success')}
+        disabled={status === 'loading' || status === 'success' || soldOut}
         className="btn btn-primary"
       >
         {status === 'loading'
